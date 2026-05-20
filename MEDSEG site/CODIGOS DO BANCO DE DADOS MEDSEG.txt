@@ -1,0 +1,52 @@
+CREATE DATABASE IF NOT EXISTS medseg;
+USE medseg;
+
+-- 3. Tabela de Usuários (Ajustada com CEP e Número)
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    login VARCHAR(50) NOT NULL UNIQUE, -- Aqui ele pode usar um apelido ou CPF
+    email VARCHAR(100) NOT NULL,       -- Sem o UNIQUE para não travar cadastros
+    senha VARCHAR(255) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    nascimento DATE NOT NULL,
+    cep VARCHAR(9),       -- Adicionado
+    endereco VARCHAR(150),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    uf CHAR(2),
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. Tabela de Empresas (Ajustada com Número)
+CREATE TABLE IF NOT EXISTS empresas (
+    id_empresa INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    cnpj VARCHAR(20) NOT NULL UNIQUE,
+    cep VARCHAR(9) NOT NULL,
+    login VARCHAR(50) NOT NULL UNIQUE, -- A empresa também terá um ID de acesso único
+    email VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    endereco VARCHAR(150),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    uf CHAR(2),
+    senha VARCHAR(255) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. Tabela de Funcionários (Ajustada com CEP e Número)
+CREATE TABLE IF NOT EXISTS funcionarios (
+    id_funcionario INT AUTO_INCREMENT PRIMARY KEY,
+    id_empresa INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20),
+    email VARCHAR(100) ,
+    cep VARCHAR(9),       -- Adicionado
+    endereco VARCHAR(150),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    uf CHAR(2),
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_empresa) REFERENCES empresas(id_empresa) ON DELETE CASCADE
+);
